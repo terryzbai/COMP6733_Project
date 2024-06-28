@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n = 'jinzhi'
+n = 'still_1s'
 
 # Load the CSV file
 file_path = './data/'+ n +'.csv'
