@@ -17,7 +17,6 @@ col3 = data.iloc[:, 2]
 col4 = data.iloc[:, 3]
 col5 = data.iloc[:, 4]
 col6 = data.iloc[:, 5]
-print(col6)
 
 # Plot the data
 plt.figure(figsize=(15, 10))
