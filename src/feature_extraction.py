@@ -69,8 +69,8 @@ Input:
 Output:
     @result         float
 '''
-def DCArea(data, time, sampling_rate): 
-    time_data = np.linspace(0, time, sampling_rate * time)
+def DCArea(data, sampling_rate):
+    time_data = np.linspace(0, len(data) / sampling_rate, len(data))
 
     result =  []
     for i in range(data.shape[1]):
@@ -89,8 +89,8 @@ def ACAbsMean(data):
     result = np.mean(np.abs(data))
     return np.array([result])
 
-def ACAbsArea(data, time, sampling_rate):
-    time_data = np.linspace(0, time, sampling_rate * time)
+def ACAbsArea(data, sampling_rate):
+    time_data = np.linspace(0, len(data) / sampling_rate, len(data))
     
     result =  []
     for i in range(data.shape[1]):
