@@ -2,7 +2,7 @@ import pandas as pd
 import feature_extraction
 
 # Load the CSV file
-file_path = '../data/move_1s.csv'
+file_path = './data/move_1s.csv'
 data = pd.read_csv(file_path, header=None).to_numpy()
 
 sampling_rate = 100
