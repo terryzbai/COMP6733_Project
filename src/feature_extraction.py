@@ -19,7 +19,7 @@ def ACEnergy(data):
 
     # Calculate ACEnergy
     result = (1 / (window_length / 2)) * np.sum(magnitudes ** 2)
-    return result
+    return np.array([result])
 
 '''
 Input:
@@ -41,7 +41,7 @@ def ACLowEnergy(data, sampling_rate):
     # Calculate ACLowEnergy
     fft_low_freq = fft_coefficients[low_freq_indices]
     result = np.sum(np.abs(fft_low_freq) ** 2)
-    return result
+    return np.array([result])
 
 '''
 Input:
@@ -53,7 +53,6 @@ def DCMean(data):
     DCMean_per_axis = np.mean(data, axis=0)
     return DCMean_per_axis
 
-
 '''
 Input:
     @data           array with size of (window_length, num_dimension)
@@ -62,7 +61,7 @@ Output:
 '''
 def DCTotalMean(data):
     result = np.sum(data) / len(data)
-    return result
+    return np.array([result])
 
 '''
 Input:
@@ -84,11 +83,11 @@ def DCArea(data, time, sampling_rate):
 '''
 def DCPostureDist(data):
     result = np.sqrt(np.mean(data**2))
-    return result
+    return np.array([result])
 
 def ACAbsMean(data):
     result = np.mean(np.abs(data))
-    return result
+    return np.array([result])
 
 def ACAbsArea(data, time, sampling_rate):
     time_data = np.linspace(0, time, sampling_rate * time)
@@ -97,12 +96,12 @@ def ACAbsArea(data, time, sampling_rate):
     for i in range(data.shape[1]):
         result = np.trapz(np.abs(data[:, i]), time_data)
 
-    return result
+    return np.array([result])
 
 
 def ACTotalAbsArea(data):
     result = np.sum(np.abs(data))
-    return result
+    return np.array([result])
 
 def ACVar(data):
     ACVar_per_axis = np.var(data, axis=0)
@@ -112,14 +111,14 @@ def ACAbsCV(data):
     abs_mean = np.mean(np.abs(data))
     abs_std = np.std(np.abs(data))
     result = np.divide(abs_std, abs_mean, out=np.zeros_like(abs_mean), where=abs_mean != 0)
-    return result
+    return np.array([result])
 
 def ACIQR(data):
     Q1 = np.percentile(data, 25)
     Q3 = np.percentile(data, 75)
     result = Q3 - Q1
-    return result
+    return np.array([result])
 
 def ACRange(data):
     result = np.max(data) - np.min(data)
-    return result
+    return np.array([result])
