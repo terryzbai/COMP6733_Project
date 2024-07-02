@@ -14,13 +14,19 @@ data.head()
 col1 = data.iloc[:, 0]
 col2 = data.iloc[:, 1]
 col3 = data.iloc[:, 2]
+col4 = data.iloc[:, 3]
+col5 = data.iloc[:, 4]
+col6 = data.iloc[:, 5]
+print(col6)
 
 # Plot the data
 plt.figure(figsize=(15, 10))
 
 # Plot for the first column
-plt.subplot(3, 1, 1)
-plt.plot(col1, label='Column 1', color='b')
+plt.subplot(2, 1, 1)
+plt.plot(col1, label='Column 1', color='r')
+plt.plot(col2, label='Column 2', color='g')
+plt.plot(col3, label='Column 3', color='b')
 plt.title('Line Plot for Column x')
 plt.xlabel('Index')
 plt.ylabel('Value')
@@ -28,22 +34,16 @@ plt.ylim(-5, 5)
 plt.legend()
 
 # Plot for the second column
-plt.subplot(3, 1, 2)
-plt.plot(col2, label='Column 2', color='g')
+plt.subplot(2, 1, 2)
+plt.plot(col4, label='Column 1', color='r')
+plt.plot(col5, label='Column 2', color='g')
+plt.plot(col6, label='Column 3', color='b')
 plt.title('Line Plot for Column y')
 plt.xlabel('Index')
 plt.ylabel('Value')
-plt.ylim(-5, 5)
+plt.ylim(-2000, 2000)
 plt.legend()
 
-# Plot for the third column
-plt.subplot(3, 1, 3)
-plt.plot(col3, label='Column 3', color='r')
-plt.title('Line Plot for Column z')
-plt.xlabel('Index')
-plt.ylabel('Value')
-plt.ylim(-5, 5)
-plt.legend()
 
 # Show the plots
 plt.tight_layout()
