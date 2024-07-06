@@ -10,6 +10,10 @@ from sklearn.neighbors import NearestCentroid
 from sklearn.metrics import classification_report, accuracy_score
 
 sampling_rate = 100
+min_gus_time = 30
+max_gus_time = 200
+thredhold = 500
+mang_change = 70
 
 def getFeatures(data):
     gf = GestureFeature(data, sampling_rate)
@@ -31,6 +35,29 @@ def getFeatures(data):
     ))
     return features
 
+def extract_gesture_clip(filepath):
+    res = []
+    temp_data = []
+    flag = False
+
+    data = pd.read_csv(filepath).to_numpy()
+    col4 = data[:, 3]
+    col5 = data[:, 4]
+    col6 = data[:, 5]
+    gyo  = col4**2 + col5**2 + col6**2
+
+    for i in range(1,len(data)):
+        if gyo[i] < thredhold and np.abs(gyo[i] - gyo[i-1]) < mang_change:
+            if flag == True and min_gus_time <len(temp_data) < max_gus_time :
+                res.append(np.array(temp_data))
+            flag = False
+            temp_data = []
+        else:
+            flag = True
+            temp_data.append(data[i])
+
+    return res
+
 def getDataset(dataset_path):
     # Load the CSV file
     file_names = os.listdir(dataset_path)
@@ -47,25 +74,23 @@ def getDataset(dataset_path):
             experimenter_id = match.group("experimenter_id")
             gesture_id = match.group("gesture_id")
             sample_id = match.group("sample_id")
-            params = {
-                "experimenter_id": experimenter_id,
-                "gesture_id": int(gesture_id),
-                "sample_id": int(sample_id)
-            }
-            print(params)
+
+            # Extract gesture clip
+            gesture_clips = extract_gesture_clip(file_path)
+            print(f"number of useful clip in {file_name}: {len(gesture_clips)}")
+
+            for gesture_clip in gesture_clips:
+                features = getFeatures(gesture_clip)
+                x.append(features)
+                y.append(int(gesture_id))
+
         else:
             continue
 
-        data = pd.read_csv(file_path, header=None).to_numpy()
-        features = getFeatures(data)
-        print(f"{file_path}-{gesture_id}: {features}")
-        x.append(features)
-        y.append(int(gesture_id))
-
     return np.array(x), np.array(y)
 
-X, y = getDataset('./noise_data')
-print(X)
+X, y = getDataset('./data')
+# print(X)
 print(X.shape)
 
 # Split the dataset into training and testing sets
@@ -84,4 +109,3 @@ print(y_test)
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
 print("Accuracy:", accuracy_score(y_test, y_pred))
-
