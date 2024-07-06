@@ -1,124 +1,90 @@
 import numpy as np
 
-'''
-Input:
-    @data           array with size of (window_length, num_dimension)
-Output:
-    @result         float
-'''
-def ACEnergy(data):
-    # Window size
-    window_length = len(data)
 
-    # FFT coefficients
-    fft_coefficients = np.fft.fft(data)
+class GestureFeature:
+    def __init__(self, data, sampling_rate):
+        self.data = data
+        self.sampling_rate = sampling_rate
+        self.window_length = len(self.data)
 
-    # Calculate magnitudes with the half of FFT (due to symmetry)
-    half_fft = fft_coefficients[:window_length // 2]
-    magnitudes = np.abs(half_fft)
+        # FFT coefficients
+        self.fft_coefficients = np.fft.fft(self.data)
 
-    # Calculate ACEnergy
-    result = (1 / (window_length / 2)) * np.sum(magnitudes ** 2)
-    return np.array([result])
+    def ACEnergy(self):
+        # Calculate magnitudes with the half of FFT (due to symmetry)
+        half_fft = self.fft_coefficients[:self.window_length // 2]
+        magnitudes = np.abs(half_fft)
 
-'''
-Input:
-    @data           array with size of (window_length, num_dimension)
-    @sampling_rate  integer
-Output:
-    @result         float
-'''
-def ACLowEnergy(data, sampling_rate):
-    # FFT
-    fft_coefficients = np.fft.fft(data)
+        # Calculate ACEnergy
+        result = (1 / (self.window_length / 2)) * np.sum(magnitudes ** 2)
+        return np.array([result])
 
-    # Frequencies
-    frequencies = np.linspace(0, sampling_rate, len(data))
+    def ACLowEnergy(self):
+        # Frequencies
+        frequencies = np.linspace(0, self.sampling_rate, len(self.data))
 
-    # Filter low frequencies
-    low_freq_indices = np.where((frequencies >= 0) & (frequencies <= 1))
+        # Filter low frequencies
+        low_freq_indices = np.where((frequencies >= 0) & (frequencies <= 1))
 
-    # Calculate ACLowEnergy
-    fft_low_freq = fft_coefficients[low_freq_indices]
-    result = np.sum(np.abs(fft_low_freq) ** 2)
-    return np.array([result])
+        # Calculate ACLowEnergy
+        fft_low_freq = self.fft_coefficients[low_freq_indices]
+        result = np.sum(np.abs(fft_low_freq) ** 2)
+        return np.array([result])
 
-'''
-Input:
-    @data           array with size of (window_length, num_dimension)
-Output:
-    @result         vector with length of num_dimension
-'''
-def DCMean(data):
-    DCMean_per_axis = np.mean(data, axis=0)
-    return DCMean_per_axis
+    def DCMean(self):
+        DCMean_per_axis = np.mean(self.data, axis=0)
+        return DCMean_per_axis
 
-'''
-Input:
-    @data           array with size of (window_length, num_dimension)
-Output:
-    @result         float
-'''
-def DCTotalMean(data):
-    result = np.sum(data) / len(data)
-    return np.array([result])
+    def DCTotalMean(self):
+        result = np.sum(self.data) / len(self.data)
+        return np.array([result])
 
-'''
-Input:
-    @data           array with size of (window_length, num_dimension)
-Output:
-    @result         float
-'''
-def DCArea(data, sampling_rate):
-    time_data = np.linspace(0, len(data) / sampling_rate, len(data))
+    def DCArea(self):
+        time_data = np.linspace(0, len(self.data) / self.sampling_rate, len(self.data))
 
-    result =  []
-    for i in range(data.shape[1]):
-        result.append(np.trapz(data[:, i], time_data))
+        result =  []
+        for i in range(self.data.shape[1]):
+            result.append(np.trapz(self.data[:, i], time_data))
 
-    return result
+        return result
 
-'''
+    def DCPostureDist(self):
+        result = np.sqrt(np.mean(self.data**2))
+        return np.array([result])
 
-'''
-def DCPostureDist(data):
-    result = np.sqrt(np.mean(data**2))
-    return np.array([result])
+    def ACAbsMean(self):
+        result = np.mean(np.abs(self.data))
+        return np.array([result])
 
-def ACAbsMean(data):
-    result = np.mean(np.abs(data))
-    return np.array([result])
+    def ACAbsArea(self):
+        time_data = np.linspace(0, len(self.data) / self.sampling_rate, len(self.data))
 
-def ACAbsArea(data, sampling_rate):
-    time_data = np.linspace(0, len(data) / sampling_rate, len(data))
-    
-    result =  []
-    for i in range(data.shape[1]):
-        result = np.trapz(np.abs(data[:, i]), time_data)
+        result =  []
+        for i in range(self.data.shape[1]):
+            result = np.trapz(np.abs(self.data[:, i]), time_data)
 
-    return np.array([result])
+            return np.array([result])
 
+    def ACTotalAbsArea(self):
+        result = np.sum(np.abs(self.data))
+        return np.array([result])
 
-def ACTotalAbsArea(data):
-    result = np.sum(np.abs(data))
-    return np.array([result])
+    def ACVar(self):
+        ACVar_per_axis = np.var(self.data, axis=0)
+        return ACVar_per_axis
 
-def ACVar(data):
-    ACVar_per_axis = np.var(data, axis=0)
-    return ACVar_per_axis
+    def ACAbsCV(self):
+        abs_mean = np.mean(np.abs(self.data))
+        abs_std = np.std(np.abs(self.data))
+        result = np.divide(abs_std, abs_mean, out=np.zeros_like(abs_mean), where=abs_mean != 0)
+        return np.array([result])
 
-def ACAbsCV(data):
-    abs_mean = np.mean(np.abs(data))
-    abs_std = np.std(np.abs(data))
-    result = np.divide(abs_std, abs_mean, out=np.zeros_like(abs_mean), where=abs_mean != 0)
-    return np.array([result])
+    def ACIQR(self):
+        Q1 = np.percentile(self.data, 25)
+        Q3 = np.percentile(self.data, 75)
+        result = Q3 - Q1
+        return np.array([result])
 
-def ACIQR(data):
-    Q1 = np.percentile(data, 25)
-    Q3 = np.percentile(data, 75)
-    result = Q3 - Q1
-    return np.array([result])
-
-def ACRange(data):
-    result = np.max(data) - np.min(data)
-    return np.array([result])
+    def ACRange_per_axis(self):
+        result = np.max(self.data) - np.min(self.data)
+        return np.array([result])
