@@ -1,7 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-n = 'yc_01_001'
+n = 'tb_01_001'
 
 # Load the CSV file
 file_path = './data/'+ n +'.csv'
@@ -18,14 +19,37 @@ col4 = data.iloc[:, 3]
 col5 = data.iloc[:, 4]
 col6 = data.iloc[:, 5]
 
+gyo  = col4**2 + col5**2 + col6**2
+
+
+res = []
+data1 = []
+flag = False
+for i in range(len(col1)):
+    if gyo[i] < 150:
+        if flag == True and 40 <len(data1) < 200:
+            res.append(data1)
+        flag = False
+        data1 = []
+    else:
+        flag = True
+        data1.append(i)
+
+
+print(len(res))
+
 # Plot the data
-plt.figure(figsize=(15, 10))
+plt.figure(figsize=(15, 8))
 
 # Plot for the first column
 plt.subplot(2, 1, 1)
 plt.plot(col1, label='Column 1', color='r')
 plt.plot(col2, label='Column 2', color='g')
 plt.plot(col3, label='Column 3', color='b')
+
+for i in range(len(res)):
+    plt.axvline(x=res[i][0], color='r', linestyle='--')
+    plt.axvline(x=res[i][-1], color='g', linestyle='--')
 plt.title('Line Plot for Column x')
 plt.xlabel('Index')
 plt.ylabel('Value')
@@ -37,7 +61,10 @@ plt.subplot(2, 1, 2)
 plt.plot(col4, label='Column 1', color='r')
 plt.plot(col5, label='Column 2', color='g')
 plt.plot(col6, label='Column 3', color='b')
-plt.axvline(x=50, color='r', linestyle='--')
+
+for i in range(len(res)):
+    plt.axvline(x=res[i][0], color='r', linestyle='--')
+    plt.axvline(x=res[i][-1], color='g', linestyle='--')
 plt.title('Line Plot for Column y')
 plt.xlabel('Index')
 plt.ylabel('Value')
