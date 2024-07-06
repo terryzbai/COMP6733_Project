@@ -2,9 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'yc_03_012'
+n = 'hp_01_011'
 
-min_gus_time = 30
+min_gus_time = 25
 max_gus_time = 200
 thredhold = 500
 mang_change = 70
