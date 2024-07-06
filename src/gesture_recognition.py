@@ -8,6 +8,9 @@ from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestCentroid
 from sklearn.metrics import classification_report, accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 
 sampling_rate = 100
 min_gus_time = 30
@@ -77,7 +80,7 @@ def getDataset(dataset_path):
 
             # Extract gesture clip
             gesture_clips = extract_gesture_clip(file_path)
-            print(f"number of useful clip in {file_name}: {len(gesture_clips)}")
+            print(f"number of useful clips in {file_name}: {len(gesture_clips)}")
 
             for gesture_clip in gesture_clips:
                 features = getFeatures(gesture_clip)
@@ -89,18 +92,61 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X, y = getDataset('./data')
-# print(X)
-print(X.shape)
+X, y = getDataset('./tb_data')
+print(f"X shape:, {X.shape}")
 
+# Get unique values and their counts
+labels, counts = np.unique(y, return_counts=True)
+
+# Print unique values and their counts
+for label, count in zip(labels, counts):
+    print(f'Value: {label}, Count: {count}')
 # Split the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+#--------------------------------------------------
 # Create and train the Nearest Centroid classifier
 clf = NearestCentroid()
 clf.fit(X_train, y_train)
-
 # Predict the labels for the test set
+y_pred = clf.predict(X_test)
+print(y_pred)
+print(y_test)
+
+# Evaluate the classifier
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+#--------------------------------------------------
+neigh = KNeighborsClassifier(n_neighbors=3)
+neigh.fit(X_train, y_train)
+y_pred = neigh.predict(X_test)
+print(y_pred)
+print(y_test)
+
+# Evaluate the classifier
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+#--------------------------------------------------
+clf = DecisionTreeClassifier(random_state=42)
+clf.fit(X_train, y_train)
+# Make predictions
+y_pred = clf.predict(X_test)
+print(y_pred)
+print(y_test)
+
+# Evaluate the classifier
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+#--------------------------------------------------
+clf = LogisticRegression(random_state=0)
+clf.fit(X_train, y_train)
+# Make predictions
 y_pred = clf.predict(X_test)
 print(y_pred)
 print(y_test)
