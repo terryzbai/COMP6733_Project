@@ -6,7 +6,7 @@ max_gus_time = 200
 thredhold = 250
 mang_change = 50
 
-def get_data_from_files(*files):
+def get_data_from_files(files):
     res = []
     temp_data = []
     flag = False
@@ -28,5 +28,5 @@ def get_data_from_files(*files):
     
     return res
     
-print(get_data_from_files('./data/yc_01_011.csv'))
-print(len(get_data_from_files('./data/yc_01_011.csv')))
+# print(get_data_from_files('./data/yc_01_011.csv','./data/yc_02_011.csv'))
+print(len(get_data_from_files(['./data/yc_01_011.csv','./data/yc_02_011.csv'])))

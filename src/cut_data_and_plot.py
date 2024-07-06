@@ -2,12 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'yc_03_011'
+n = 'yc_03_012'
 
 min_gus_time = 30
 max_gus_time = 200
-thredhold = 250
-mang_change = 50
+thredhold = 500
+mang_change = 70
 
 # Load the CSV file
 file_path = './data/'+ n +'.csv'
