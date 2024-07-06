@@ -2,7 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'tb_01_001'
+n = 'yc_03_011'
+
+min_gus_time = 30
+max_gus_time = 200
+thredhold = 250
+mang_change = 50
 
 # Load the CSV file
 file_path = './data/'+ n +'.csv'
@@ -25,9 +30,9 @@ gyo  = col4**2 + col5**2 + col6**2
 res = []
 data1 = []
 flag = False
-for i in range(len(col1)):
-    if gyo[i] < 150:
-        if flag == True and 40 <len(data1) < 200:
+for i in range(1,len(col1)):
+    if gyo[i] < thredhold and np.abs(gyo[i] - gyo[i-1]) < mang_change:
+        if flag == True and min_gus_time <len(data1) < max_gus_time :
             res.append(data1)
         flag = False
         data1 = []
@@ -37,6 +42,7 @@ for i in range(len(col1)):
 
 
 print(len(res))
+print([len(x) for x in res])
 
 # Plot the data
 plt.figure(figsize=(15, 8))

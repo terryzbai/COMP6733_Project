@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-n = 'tb_woquan'
+n = 'yc_01_011'
 
 # Load the CSV file
 file_path = './data/'+ n +'.csv'
