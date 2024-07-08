@@ -34,7 +34,8 @@ def getFeatures(data):
         gf.ACVar(),
         gf.ACAbsCV(),
         gf.ACIQR(),
-        gf.ACRange_per_axis()
+        gf.ACRange_per_axis(),
+        np.array([len(data)])
     ))
     return features
 
@@ -124,6 +125,7 @@ neigh.fit(X_train, y_train)
 y_pred = neigh.predict(X_test)
 print(y_pred)
 print(y_test)
+print(neigh.predict_proba(X_test))
 
 # Evaluate the classifier
 print("Classification Report:")
@@ -150,6 +152,7 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 print(y_pred)
 print(y_test)
+print(clf.predict_proba(X_test))
 
 # Evaluate the classifier
 print("Classification Report:")
