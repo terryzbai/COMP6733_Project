@@ -12,5 +12,5 @@ def mycallback(t):
 tim = Timer(1, period=10000, mode=Timer.PERIODIC,callback=mycallback)
 tim.start()
 
-time.sleep_ms(1000)
+time.sleep_ms(10000)
 tim.stop()
