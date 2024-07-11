@@ -82,11 +82,11 @@ TEMP_TO_COLOUR = {
 
 UUID_CONTROL_CHARACTERISTIC = '00010203-0405-0607-0809-0A0B0C0D2B11'
 
-def color2rgb(color):
+def colour2rgb(colour):
     """
-    Converts a color-convertible into 3-tuple of 0-255 valued ints.
+    Converts a colour-convertible into 3-tuple of 0-255 valued ints.
     """
-    col = Color(color)
+    col = Color(colour)
     rgb = col.red, col.green, col.blue
     rgb = [round(x * 255) for x in rgb]
     return tuple(rgb)
@@ -97,11 +97,11 @@ class LedCommand(IntEnum):
     """
     POWER       = 0x01
     BRIGHTNESS  = 0x04
-    COLOR       = 0x05
+    COLOUR      = 0x05
 
 class LedMode(IntEnum):
     """
-    The mode in which a color change happens in.
+    The mode in which a colour change happens in.
     """
     COLOUR      = 0x0d
     WHITE       = 0x66
@@ -144,7 +144,7 @@ class Govee_H6004:
         
         frame += bytes([checksum & 0xFF])
 
-        # TODO: Remove command being printed out
+        # TODO: Remove command being printed
         # hex_bytes = [f'{byte:02x}' for byte in frame]
         # frame_str = f"{hex_bytes[0]} {hex_bytes[1]} {hex_bytes[2]} {hex_bytes[3]}{hex_bytes[4]}{hex_bytes[5]} {hex_bytes[6]} {hex_bytes[7]}{hex_bytes[8]}{hex_bytes[9]} {' '.join(hex_bytes[10:19])} {hex_bytes[19]}"
         # print(f"Sending command: {frame_str}")
@@ -163,11 +163,11 @@ class Govee_H6004:
             raise ValueError(f'Brightness out of range: {value}')
         await self._send(LedCommand.BRIGHTNESS, [value])
         
-    async def set_color(self, color):
+    async def set_colour(self, colour):
         """
-        Sets the LED's color.
+        Sets the LED's colour.
         """
-        await self._send(LedCommand.COLOR, [LedMode.COLOUR, *color2rgb(color), 0x0])
+        await self._send(LedCommand.COLOUR, [LedMode.COLOUR, *colour2rgb(colour), 0x0])
     
     async def set_white_temperature(self, value):
         """
@@ -177,5 +177,5 @@ class Govee_H6004:
             raise ValueError(f'White value out of range: {value}')
         colour = TEMP_TO_COLOUR[value]
         
-        # Set the color to white (although ignored) and the boolean flag to True
-        await self._send(LedCommand.COLOR, [LedMode.WHITE, 0xff, 0xff, 0xff, 0x01, *color2rgb(colour)])
+        # Set the colour to white (although ignored) and the boolean flag to True
+        await self._send(LedCommand.COLOUR, [LedMode.WHITE, 0xff, 0xff, 0xff, 0x01, *colour2rgb(colour)])

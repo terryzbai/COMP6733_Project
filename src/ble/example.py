@@ -11,7 +11,7 @@ async def main():
         await led.set_state(True)
         await asyncio.sleep(.5)
 
-        print('Changing colors in RGB')
+        print('Changing colours in RGB')
         colours = [
             '#FF0000',   # Red
             '#FF7F00',   # Orange
@@ -26,9 +26,9 @@ async def main():
             '#FF00FF',   # Magenta
             '#FF007F'    # Rose
         ]
-        for color in colours:
-            print(f'[*] {color}')
-            await led.set_color(color)
+        for colour in colours:
+            print(f'[*] {colour}')
+            await led.set_colour(colour)
             await asyncio.sleep(1)
 
         print('Changing brightness')
