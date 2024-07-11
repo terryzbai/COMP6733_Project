@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'hp_01_011'
+n = 'yc_02_011'
 
 min_gus_time = 25
 max_gus_time = 200
@@ -49,14 +49,14 @@ plt.figure(figsize=(15, 8))
 
 # Plot for the first column
 plt.subplot(2, 1, 1)
-plt.plot(col1, label='Column 1', color='r')
-plt.plot(col2, label='Column 2', color='g')
-plt.plot(col3, label='Column 3', color='b')
+plt.plot(col1, label='Column x', color='r')
+plt.plot(col2, label='Column y', color='g')
+plt.plot(col3, label='Column z', color='b')
 
 for i in range(len(res)):
     plt.axvline(x=res[i][0], color='r', linestyle='--')
     plt.axvline(x=res[i][-1], color='g', linestyle='--')
-plt.title('Line Plot for Column x')
+plt.title('Accelerometer')
 plt.xlabel('Index')
 plt.ylabel('Value')
 plt.ylim(-5, 5)
@@ -64,14 +64,14 @@ plt.legend()
 
 # Plot for the second column
 plt.subplot(2, 1, 2)
-plt.plot(col4, label='Column 1', color='r')
-plt.plot(col5, label='Column 2', color='g')
-plt.plot(col6, label='Column 3', color='b')
+plt.plot(col4, label='Column x', color='r')
+plt.plot(col5, label='Column y', color='g')
+plt.plot(col6, label='Column z', color='b')
 
 for i in range(len(res)):
     plt.axvline(x=res[i][0], color='r', linestyle='--')
     plt.axvline(x=res[i][-1], color='g', linestyle='--')
-plt.title('Line Plot for Column y')
+plt.title(' Gyroscope ')
 plt.xlabel('Index')
 plt.ylabel('Value')
 plt.ylim(-2000, 2000)
