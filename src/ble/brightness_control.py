@@ -1,21 +1,21 @@
 import asyncio
-from bluetooth_led import BluetoothLED
+from govee_h6004 import Govee_H6004
 
 from known_devices import GOVEE_BULB_ADDRESS
 
 async def main():
-    async with BluetoothLED(GOVEE_BULB_ADDRESS) as led:
+    async with Govee_H6004(GOVEE_BULB_ADDRESS) as led:
         await led.set_state(True)
         print("LED turned on.")
-        print("Enter brightness value (0-100) or CTRL+C to exit:")
+        print("Enter brightness value (1-100) or CTRL+C to exit:")
 
         while True:
             try:
-                brightness = float(input('Brightness (0-100): '))
-                if 0 <= brightness <= 100:
-                    await led.set_brightness(brightness / 100)
+                brightness = int(input('Brightness (1-100): '))
+                if 1 <= brightness <= 100:
+                    await led.set_brightness(brightness)
                 else:
-                    print('Invalid brightness. Please enter a number between 0 and 100.')
+                    print('Invalid brightness. Please enter a number between 1 and 100.')
             except KeyboardInterrupt:
                 print('\nExiting...')
                 break

@@ -1,36 +1,49 @@
 import asyncio
-from bluetooth_led import BluetoothLED
+from govee_h6004 import Govee_H6004
 
 from known_devices import GOVEE_BULB_ADDRESS
 
 
 # Example usage
-# NOTE: Not all functionalities are properly fully working
 async def main():
-    async with BluetoothLED(GOVEE_BULB_ADDRESS) as led:
+    async with Govee_H6004(GOVEE_BULB_ADDRESS) as led:
         print('Switching on LED')
         await led.set_state(True)
         await asyncio.sleep(.5)
 
         print('Changing colors in RGB')
-        for color in ['red', 'green', 'blue', 'purple', 'yellow', 'cyan', 'orange', 'white']:
+        colours = [
+            '#FF0000',   # Red
+            '#FF7F00',   # Orange
+            '#FFFF00',   # Yellow
+            '#7FFF00',   # Lime
+            '#00FF00',   # Green
+            '#00FF7F',   # Spring Green
+            '#00FFFF',   # Cyan
+            '#007FFF',   # Azure
+            '#0000FF',   # Blue
+            '#7F00FF',   # Violet
+            '#FF00FF',   # Magenta
+            '#FF007F'    # Rose
+        ]
+        for color in colours:
             print(f'[*] {color}')
             await led.set_color(color)
-            await asyncio.sleep(.5)
+            await asyncio.sleep(1)
 
         print('Changing brightness')
-        for i in range(5+1):
-            val = i/5
-            print(f'[*] {int(val*100):03d}%')
-            await led.set_brightness(val)
-            await asyncio.sleep(.5)
+        for brightness in [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]:
+            print(f'[*] {brightness}%')
+            await led.set_brightness(brightness)
+            await asyncio.sleep(1)
 
-        print('Changing colors in white-mode')
-        for i in range(-20, 20+1):
-            val = i/20
-            print(f'[*] {abs(int(val*100)):03d}% {"warm" if val <= 0 else "cold"} white')
-            await led.set_color_white(val)
-            await asyncio.sleep(.2)
+        # TODO: Complete white temperature functionality
+        # print('Changing temperature in white-mode')
+        # for i in range(18, 90):
+        #     val = i*100
+        #     print(f'[*] white-temperature: {val}')
+        #     await led.set_white_temperature(val)
+        #     await asyncio.sleep(.2)
 
         print('Switching off LED')
         await led.set_state(False)
