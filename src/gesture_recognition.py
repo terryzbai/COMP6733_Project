@@ -93,7 +93,7 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X, y = getDataset('./data')
+X, y = getDataset('./tb_data')
 print(f"X shape:, {X.shape}")
 
 # Get unique values and their counts
