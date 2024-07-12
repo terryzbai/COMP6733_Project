@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'yc_02_011'
+n = 'tb_woquan'
 
 min_gus_time = 25
 max_gus_time = 200
@@ -10,7 +10,7 @@ thredhold = 500
 mang_change = 70
 
 # Load the CSV file
-file_path = './data/'+ n +'.csv'
+file_path = './exp/'+ n +'.csv'
 data = pd.read_csv(file_path)
 
 # Display the dataframe to understand its structure
