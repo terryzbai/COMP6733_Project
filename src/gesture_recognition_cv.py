@@ -93,17 +93,8 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X, y = getDataset('./tb_data')
-print(f"X shape:, {X.shape}")
-
-# Get unique values and their counts
-labels, counts = np.unique(y, return_counts=True)
-
-# Print unique values and their counts
-for label, count in zip(labels, counts):
-    print(f'Value: {label}, Count: {count}')
-# Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+X_train, y_train = getDataset('./tb_data')
+X_test, y_test = getDataset('./hp_data')
 
 #--------------------------------------------------
 # Create and train the Nearest Centroid classifier

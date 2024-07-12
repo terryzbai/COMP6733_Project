@@ -49,31 +49,31 @@ plt.figure(figsize=(15, 8))
 
 # Plot for the first column
 plt.subplot(2, 1, 1)
-plt.plot(col1, label='Column x', color='r')
-plt.plot(col2, label='Column y', color='g')
-plt.plot(col3, label='Column z', color='b')
+plt.plot(range(0,len(col1)*10,10), col1, color='r')
+plt.plot(range(0,len(col1)*10,10), col2, color='g')
+plt.plot(range(0,len(col1)*10,10), col3, color='b')
 
 for i in range(len(res)):
-    plt.axvline(x=res[i][0], color='r', linestyle='--')
-    plt.axvline(x=res[i][-1], color='g', linestyle='--')
-plt.title('Accelerometer')
-plt.xlabel('Index')
-plt.ylabel('Value')
+    plt.axvline(x=res[i][0]*10, color='r', linestyle='--')
+    plt.axvline(x=res[i][-1]*10, color='g', linestyle='--')
+plt.title('Accelerometer', fontsize=24)
+plt.xlabel('Time(ms)', fontsize=24)
+plt.ylabel('Value(g)', fontsize=24)
 plt.ylim(-5, 5)
 plt.legend()
 
 # Plot for the second column
 plt.subplot(2, 1, 2)
-plt.plot(col4, label='Column x', color='r')
-plt.plot(col5, label='Column y', color='g')
-plt.plot(col6, label='Column z', color='b')
+plt.plot(range(0,len(col1)*10,10),col4, color='r')
+plt.plot(range(0,len(col1)*10,10),col5, color='g')
+plt.plot(range(0,len(col1)*10,10),col6, color='b')
 
 for i in range(len(res)):
-    plt.axvline(x=res[i][0], color='r', linestyle='--')
-    plt.axvline(x=res[i][-1], color='g', linestyle='--')
-plt.title(' Gyroscope ')
-plt.xlabel('Index')
-plt.ylabel('Value')
+    plt.axvline(x=res[i][0]*10, color='r', linestyle='--')
+    plt.axvline(x=res[i][-1]*10, color='g', linestyle='--')
+plt.title(' Gyroscope ', fontsize=24)
+plt.xlabel('Time(ms)', fontsize=24)
+plt.ylabel('Value(dps)', fontsize=24)
 plt.ylim(-2000, 2000)
 plt.legend()
 
