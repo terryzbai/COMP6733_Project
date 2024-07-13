@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
+import joblib
 
 sampling_rate = 100
 min_gus_time = 30
@@ -93,7 +94,7 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X, y = getDataset('./tb_yc_data')
+X, y = getDataset('./tb_data')
 print(f"X shape:, {X.shape}")
 
 # Get unique values and their counts
@@ -103,7 +104,7 @@ labels, counts = np.unique(y, return_counts=True)
 for label, count in zip(labels, counts):
     print(f'Value: {label}, Count: {count}')
 # Split the dataset into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=12)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 #--------------------------------------------------
 # Create and train the Nearest Centroid classifier
@@ -111,6 +112,7 @@ clf = NearestCentroid()
 clf.fit(X_train, y_train)
 # Predict the labels for the test set
 y_pred = clf.predict(X_test)
+joblib.dump(clf, './model/decision_tree_model.pkl')
 print(y_pred)
 print(y_test)
 

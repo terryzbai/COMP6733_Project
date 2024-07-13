@@ -94,7 +94,7 @@ def getDataset(dataset_path):
     return np.array(x), np.array(y)
 
 X_train, y_train = getDataset('./tb_data')
-X_test, y_test = getDataset('./yc_data')
+X_test, y_test = getDataset('./hp_data')
 
 #--------------------------------------------------
 # Create and train the Nearest Centroid classifier
