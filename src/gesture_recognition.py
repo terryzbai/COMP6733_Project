@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 import joblib
 
 sampling_rate = 100
@@ -149,6 +150,21 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 
 #--------------------------------------------------
 clf = LogisticRegression(random_state=0)
+clf.fit(X_train, y_train)
+# Make predictions
+y_pred = clf.predict(X_test)
+print(y_pred)
+print(y_test)
+np.set_printoptions(suppress=True, precision=4)
+print(clf.predict_proba(X_test))
+
+# Evaluate the classifier
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+#--------------------------------------------------
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 # Make predictions
 y_pred = clf.predict(X_test)
