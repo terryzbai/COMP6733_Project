@@ -113,7 +113,7 @@ clf = NearestCentroid()
 clf.fit(X_train, y_train)
 # Predict the labels for the test set
 y_pred = clf.predict(X_test)
-joblib.dump(clf, './model/decision_tree_model.pkl')
+# joblib.dump(clf, './model/decision_tree_model.pkl')
 print(y_pred)
 print(y_test)
 
@@ -168,6 +168,8 @@ clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 # Make predictions
 y_pred = clf.predict(X_test)
+joblib.dump(clf, './model/rf.pkl')
+
 print(y_pred)
 print(y_test)
 np.set_printoptions(suppress=True, precision=4)

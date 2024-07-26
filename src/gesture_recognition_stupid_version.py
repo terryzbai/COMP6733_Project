@@ -21,24 +21,7 @@ thredhold = 500
 mang_change = 70
 
 def getFeatures(data):
-    # gf = GestureFeature(data, sampling_rate)
 
-    # features = np.concatenate((
-    #     gf.ACEnergy(),
-    #     gf.ACLowEnergy(),
-    #     gf.DCMean(),
-    #     gf.DCTotalMean(),
-    #     gf.DCArea(),
-    #     gf.DCPostureDist(),
-    #     gf.ACAbsMean(),
-    #     gf.ACAbsArea(),
-    #     gf.ACTotalAbsArea(),
-    #     gf.ACVar(),
-    #     gf.ACAbsCV(),
-    #     gf.ACIQR(),
-    #     gf.ACRange_per_axis(),
-    #     np.array([len(data)])
-    # ))
     array_150x6 = np.zeros((150, 6))
     array_150x6[:len(data), :] = data
 
