@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-n = 'hp_05_012'
+n = 'hp_04_015'
 
 min_gus_time = 25
 max_gus_time = 200
@@ -80,5 +80,5 @@ plt.legend()
 
 # Show the plots
 plt.tight_layout()
-plt.savefig('./img/'+ n +'_cut.png')
+plt.savefig('./img/'+ n +'_highlighted_segments.png')
 plt.show()
