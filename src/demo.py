@@ -11,7 +11,7 @@ mang_change = 70
 
 # 假设 X_test 已经定义
 # 加载模型
-clf = joblib.load('./model/decision_tree_model.pkl')
+clf = joblib.load('./model/vf.pkl')
 
 # 进行预测
 # y_pred = clf.predict(X_test)

@@ -11,6 +11,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 
 sampling_rate = 100
 min_gus_time = 30
@@ -93,8 +94,8 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X_train, y_train = getDataset('./tb_data')
-X_test, y_test = getDataset('./hp_data')
+X_train, y_train = getDataset('./data')
+X_test, y_test = getDataset('./yc_data')
 
 #--------------------------------------------------
 # Create and train the Nearest Centroid classifier
@@ -141,6 +142,23 @@ clf = LogisticRegression(random_state=0)
 clf.fit(X_train, y_train)
 # Make predictions
 y_pred = clf.predict(X_test)
+print(y_pred)
+print(y_test)
+np.set_printoptions(suppress=True, precision=4)
+print(clf.predict_proba(X_test))
+
+# Evaluate the classifier
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+#--------------------------------------------------
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+# Make predictions
+y_pred = clf.predict(X_test)
+# joblib.dump(clf, './model/rf.pkl')
+
 print(y_pred)
 print(y_test)
 np.set_printoptions(suppress=True, precision=4)
