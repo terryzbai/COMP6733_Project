@@ -94,7 +94,9 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X_train, y_train = getDataset('./data')
+X_train, y_train = getDataset('./data_aug')
+# X_train, y_train = getDataset('./data_aug')
+
 X_test, y_test = getDataset('./yc_data')
 
 #--------------------------------------------------
