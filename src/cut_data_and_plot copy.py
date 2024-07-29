@@ -58,11 +58,11 @@ P0 = np.eye(2)  # 初始协方差矩阵
 
 
 # List all files in the current directory
-file_list = os.listdir("./rotate_data")
+file_list = os.listdir("./data")
 
 for file in file_list:
     print(file)
-    file_path = './rotate_data/'+ file
+    file_path = './data/'+ file
     data = pd.read_csv(file_path)
 
 # Display the dataframe to understand its structure
@@ -137,7 +137,7 @@ for file in file_list:
 
     # Show the plots
     plt.tight_layout()
-    plt.savefig('./img/rotate_img/'+ file.split('.')[0] +'_cut.png')
+    plt.savefig('./img/data_img/'+ file.split('.')[0] +'_cut.png')
     # plt.show()
 
 exit()
