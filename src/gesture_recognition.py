@@ -168,12 +168,15 @@ clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 # Make predictions
 y_pred = clf.predict(X_test)
-joblib.dump(clf, './model/rf.pkl')
+joblib.dump(clf, './model/rf_73.pkl')
 
 print(y_pred)
 print(y_test)
 np.set_printoptions(suppress=True, precision=4)
-print(clf.predict_proba(X_test))
+proba_vals = clf.predict_proba(X_test)
+for proba in proba_vals:
+    print(proba, np.var(proba))
+
 
 # Evaluate the classifier
 print("Classification Report:")

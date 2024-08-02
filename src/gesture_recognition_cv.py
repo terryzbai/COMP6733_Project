@@ -1,5 +1,6 @@
 import os
 import re
+import joblib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -80,6 +81,7 @@ def getDataset(dataset_path):
             gesture_id = match.group("gesture_id")
             sample_id = match.group("sample_id")
 
+            print(file_name)
             # Extract gesture clip
             gesture_clips = extract_gesture_clip(file_path)
             print(f"number of useful clips in {file_name}: {len(gesture_clips)}")
@@ -94,7 +96,7 @@ def getDataset(dataset_path):
 
     return np.array(x), np.array(y)
 
-X_train, y_train = getDataset('./data_aug')
+X_train, y_train = getDataset('./tb_data')
 # X_train, y_train = getDataset('./data_aug')
 
 X_test, y_test = getDataset('./yc_data')
@@ -159,7 +161,7 @@ clf = RandomForestClassifier(n_estimators=100, random_state=42)
 clf.fit(X_train, y_train)
 # Make predictions
 y_pred = clf.predict(X_test)
-# joblib.dump(clf, './model/rf.pkl')
+joblib.dump(clf, './model/rf.pkl')
 
 print(y_pred)
 print(y_test)

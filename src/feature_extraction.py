@@ -46,7 +46,7 @@ class GestureFeature:
         for i in range(self.data.shape[1]):
             result.append(np.trapz(self.data[:, i], time_data))
 
-        return result
+        return np.array(result)
 
     def DCPostureDist(self):
         result = np.sqrt(np.mean(self.data**2))
@@ -61,9 +61,9 @@ class GestureFeature:
 
         result =  []
         for i in range(self.data.shape[1]):
-            result = np.trapz(np.abs(self.data[:, i]), time_data)
+            result.append(np.trapz(np.abs(self.data[:, i]), time_data))
 
-            return np.array([result])
+        return np.array(result)
 
     def ACTotalAbsArea(self):
         result = np.sum(np.abs(self.data))
