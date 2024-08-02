@@ -1,7 +1,12 @@
+import asyncio
 import subprocess
 import joblib
 import numpy as np
 from feature_extraction import GestureFeature
+
+from ble.govee_h6004 import Govee_H6004
+from ble.known_devices import GOVEE_BULB_ADDRESS
+
 
 # Configuration
 SAMPLING_RATE = 100
@@ -12,7 +17,81 @@ GYRO_CHANGE_THRESHOLD = 70
 GESTURES = {1: "Snap", 2: "Clockwise", 3: "Counterclockwise", 4: "Up", 5: "Down"}
 
 # Load the pre-trained machine learning model
-clf = joblib.load("./model/rf.pkl")
+clf = joblib.load("./model/rf_73.pkl")
+
+# 6 value RGB colour wheel
+RGB_WHEEL = ["#FF0000", "#FFFF00", "#00FF00", "#00FFFF", "#0000FF", "#FF00FF"]
+
+
+class Lightbulb:
+    def __init__(self, mac):
+        self.led = Govee_H6004(mac)
+        self.power = True
+        self.colour = "#FF0000"
+        self.colour_index = 0
+        self.brightness = 100
+
+    async def connect(self):
+        await self.led.connect()
+        await self.reset()
+
+    async def disconnect(self):
+        await self.led.disconnect()
+
+    async def set_colour(self, colour):
+        if colour in RGB_WHEEL:
+            await self.led.set_colour(colour)
+            self.colour = colour
+            self.colour_index = RGB_WHEEL.index(colour)
+        else:
+            raise ValueError("Colour not in RGB wheel")
+
+    async def set_brightness(self, brightness):
+        if 1 <= brightness <= 100:
+            await self.led.set_brightness(brightness)
+            self.brightness = brightness
+        else:
+            raise ValueError("Brightness must be between 1 and 100")
+
+    async def set_power(self, state):
+        await self.led.set_state(state)
+        self.power = state
+
+    async def reset(self):
+        await self.set_power(True)
+        await self.set_colour(RGB_WHEEL[0])
+        await self.set_brightness(100)
+
+    async def toggle_power(self):
+        new_state = not self.power
+        await self.led.set_state(new_state)
+        self.power = new_state
+
+    async def next_colour(self):
+        current_index = RGB_WHEEL.index(self.colour) if self.colour in RGB_WHEEL else 0
+        next_index = (current_index + 1) % len(RGB_WHEEL)
+        new_colour = RGB_WHEEL[next_index]
+        await self.led.set_colour(new_colour)
+        self.colour = new_colour
+        self.colour_index = next_index
+
+    async def previous_colour(self):
+        current_index = RGB_WHEEL.index(self.colour) if self.colour in RGB_WHEEL else 0
+        prev_index = (current_index - 1) % len(RGB_WHEEL)
+        new_colour = RGB_WHEEL[prev_index]
+        await self.led.set_colour(new_colour)
+        self.colour = new_colour
+        self.colour_index = prev_index
+
+    async def increase_brightness(self):
+        new_brightness = min(self.brightness + 20, 100)
+        await self.led.set_brightness(new_brightness)
+        self.brightness = new_brightness
+
+    async def decrease_brightness(self):
+        new_brightness = max(self.brightness - 20, 0)
+        await self.led.set_brightness(new_brightness)
+        self.brightness = new_brightness
 
 
 def extract_features(data):
@@ -48,12 +127,27 @@ def calculate_gyroscope_magnitude(data):
     return data[3] ** 2 + data[4] ** 2 + data[5] ** 2
 
 
-def main():
+async def gesture_to_control(gesture_id, lightbulb):
+    if gesture_id == 1:
+        await lightbulb.toggle_power()
+    elif gesture_id == 2:
+        await lightbulb.next_colour()
+    elif gesture_id == 3:
+        await lightbulb.previous_colour()
+    elif gesture_id == 4:
+        await lightbulb.increase_brightness()
+    elif gesture_id == 5:
+        await lightbulb.decrease_brightness()
+    else:
+        print(f"Unknown gesture_id: {gesture_id}")
+
+
+async def main():
     """
     Runs the MicroPython script on the Arduino and process the output data.
     """
+    print("Beginning demo...")
     try:
-        print("Running script...")
         # Run the MicroPython script using ampy
         port = "/dev/cu.usbmodem0000000000001"  # USB Port of the Arduino
         filepath = "src/record_data.py"  # Path to MicroPython script
@@ -64,9 +158,15 @@ def main():
             text=True,
             bufsize=1,
         )
+        print("Script running on Arduino")
 
         gesture_data = []
         gesture_in_progress = False
+
+        # Initialise the lightbulb
+        led = Lightbulb(GOVEE_BULB_ADDRESS)
+        await led.connect()
+        print("Lightbulb initialised")
 
         with process.stdout as pipe:
             for line in pipe:
@@ -100,6 +200,7 @@ def main():
                                 print(
                                     f"Detected {predicted_gesture} ({predicted_gesture_id})"
                                 )
+                                await gesture_to_control(predicted_gesture_id, led)
 
                             gesture_in_progress = False
                             gesture_data = []
@@ -122,5 +223,4 @@ def main():
         print(f"Error: {e}")
 
 
-if __name__ == "__main__":
-    main()
+asyncio.run(main())
