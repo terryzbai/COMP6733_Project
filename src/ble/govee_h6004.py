@@ -37,14 +37,13 @@ class Govee_H6004:
         self._bt = bt_backend_cls(self.mac)
         self._dev = None
 
-    async def __aenter__(self):
+    async def connect(self):
         await self._bt.connect()
         self._dev = self._bt
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._bt.disconnect()
-        self._dev = None
+    async def disconnect(self):
+        await self._dev.disconnect()
 
     async def _send(self, cmd, payload):
         """
