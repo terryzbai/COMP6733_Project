@@ -89,7 +89,7 @@ class Lightbulb:
         self.brightness = new_brightness
 
     async def decrease_brightness(self):
-        new_brightness = max(self.brightness - 20, 0)
+        new_brightness = max(self.brightness - 20, 1)
         await self.led.set_brightness(new_brightness)
         self.brightness = new_brightness
 
