@@ -150,7 +150,7 @@ async def main():
     try:
         # Run the MicroPython script using ampy
         port = "/dev/cu.usbmodem0000000000001"  # USB Port of the Arduino
-        filepath = "src/record_data.py"  # Path to MicroPython script
+        filepath = "src/demo_arduino.py"  # Path to MicroPython script
         process = subprocess.Popen(
             ["ampy", "--port", port, "run", filepath],
             stdout=subprocess.PIPE,
@@ -218,6 +218,10 @@ async def main():
                 output=process.stdout,
                 stderr=process.stderr,
             )
+    except KeyboardInterrupt:
+        print("Interrupted by user, stopping...")
+        process.terminate()  # Terminate the subprocess
+        process.wait()  # Wait for subprocess to terminate
 
     except Exception as e:
         print(f"Error: {e}")
