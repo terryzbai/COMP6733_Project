@@ -196,11 +196,15 @@ async def main():
                             ):
                                 features = extract_features(np.array(gesture_data))
                                 predicted_gesture_id = int(clf.predict([features])[0])
-                                predicted_gesture = GESTURES[predicted_gesture_id]
-                                print(
-                                    f"Detected {predicted_gesture} ({predicted_gesture_id})"
-                                )
-                                await gesture_to_control(predicted_gesture_id, led)
+                                proba = clf.predict_proba([features])
+                                if np.var(proba) < noise_threshold:
+                                    print("Unintended behaviours")
+                                else:
+                                    predicted_gesture = GESTURES[predicted_gesture_id]
+                                    print(
+                                        f"Detected {predicted_gesture} ({predicted_gesture_id})"
+                                    )
+                                    await gesture_to_control(predicted_gesture_id, led)
 
                             gesture_in_progress = False
                             gesture_data = []
