@@ -9,6 +9,7 @@ from ble.known_devices import GOVEE_BULB_ADDRESS
 
 
 # Configuration
+noise_threshold = 0.02
 SAMPLING_RATE = 100
 MIN_GESTURE_TIME = 25
 MAX_GESTURE_TIME = 200
